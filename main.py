@@ -61,7 +61,7 @@ def login(wait):
         # 设置标题和内容
         content = get_csdn_article(article_title)
         # content = get_csdn_article_by_wenxin(article_title)
-        print(content)
+
         title_textarea = wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".input__title textarea")))
         title_textarea.send_keys(content['title'])
         # 切换到login iframe 中
@@ -79,11 +79,12 @@ def login(wait):
         driver.switch_to.default_content()
         time.sleep(2)
         driver.execute_script("document.body.click()")
-        driver.execute_script("window.scrollTo(0, 20000)")
-        time.sleep(2)
-        driver.execute_script("window.scrollTo(0, 20000)")
-        time.sleep(4)
-        driver.execute_script("window.scrollTo(0, 20000)")
+
+        for n in range(6):
+            print("滚动：", n)
+            time.sleep(2)
+            driver.execute_script("document.body.click()")
+            driver.execute_script("window.scrollTo(0, 5000)")
         # 提取摘要
         wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".btn-getdistill"))).click()
         time.sleep(5)
@@ -92,7 +93,7 @@ def login(wait):
         time.sleep(5)
         try:
             time.sleep(5)
-            print("开始创建文章", article_title)
+            print("创建完成：", article_title)
         except Exception as e:
             print("登录失效，重新登录")
             login(wait)
@@ -108,7 +109,7 @@ def login(wait):
         with open('question/local_questions.json', 'r', encoding='utf-8') as file:
             datas = json.load(file)
         for data in datas['server-values']:
-            if any(chinese_similarity(data["title"], publish["title"]) > 0.7 for publish in datas["server-published"]):
+            if any(chinese_similarity(data["title"], publish["title"]) > 0.65 for publish in datas["server-published"]):
                 print("标题重复：", data["title"])
             else:
                 print("开始创建博客：", data["title"])

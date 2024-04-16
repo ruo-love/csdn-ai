@@ -20,7 +20,7 @@ def get_csdn_article_title():
             messages.append({"role": "user", "content": content})
             messages.append({"role": "assistant", "content": data})
         messages.append({"role": "user", "content": content})
-        print(messages)
+
         response = client.chat.completions.create(
             model="glm-3-turbo",  # 填写需要调用的模型名称
             temperature=0.99,
@@ -51,7 +51,6 @@ def get_csdn_article(title):
     )
     html = markdown.markdown(response.choices[0].message.content)
     html = '<h3 style="margin:20px 0;color:#e2855c">以下内容均由AI自动化生成发布,仅供参考,谢谢您的访问</h3><br>' + html + '<br><br>'
-    print(html)
     return {
         "title": title,
         "content": html
