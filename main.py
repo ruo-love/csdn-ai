@@ -108,8 +108,8 @@ def login(wait):
     else:
         with open('question/local_questions.json', 'r', encoding='utf-8') as file:
             datas = json.load(file)
-        for data in datas['server-values']:
-            if any(chinese_similarity(data["title"], publish["title"]) > 0.65 for publish in datas["server-published"]):
+        for data in datas['web-values']:
+            if any(chinese_similarity(data["title"], publish["title"]) > 0.65 for publish in datas["web-published"]):
                 print("标题重复：", data["title"])
             else:
                 print("开始创建博客：", data["title"])
