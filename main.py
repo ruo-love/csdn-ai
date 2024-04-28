@@ -9,7 +9,7 @@ import json
 import sys
 from ai.zhipu_ai import get_csdn_article
 from lib.same_zh import chinese_similarity
-
+from selenium.webdriver.common.action_chains import ActionChains
 
 def login(wait):
     argv_local = sys.argv[0] if len(sys.argv) >= 1 else 2
@@ -41,11 +41,15 @@ def login(wait):
             (By.CSS_SELECTOR, ".tag__options-list > .tag__option-box:first-child"))).click()
         driver.execute_script("document.body.click()")
         time.sleep(2)
-
+        driver.execute_script("el=document.querySelector('#cke_1_top');el.style.display='none';")
+        driver.execute_script("el=document.querySelector('.csdn-side-toolbar');el.style.display='none';")
+        driver.execute_script("el=document.querySelector('.traffic-show-box');el.style.display='none';")
         def set_tag(text):
-
+            print("设置标签：", text)
             # 设置标签
-            wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".tag__btn-tag"))).click()
+            tab_btn = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, ".tag__btn-tag")))
+            ActionChains(driver).move_to_element(tab_btn).click().perform()
+            tab_btn.click()
             wait.until(EC.visibility_of_element_located(
                 (By.CSS_SELECTOR, ".mark_selection_box_header input"))).send_keys(
                 text)
@@ -89,7 +93,8 @@ def login(wait):
         wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".btn-getdistill"))).click()
         time.sleep(5)
         # 提交
-        wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".btn-box .btn-outline-danger"))).click()
+        # wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".btn-box .btn-outline-danger"))).click()
+        driver.execute_script("document.querySelector('.btn-box .btn-outline-danger').click()")
         time.sleep(5)
         try:
             time.sleep(5)
@@ -108,7 +113,7 @@ def login(wait):
     else:
         with open('question/local_questions.json', 'r', encoding='utf-8') as file:
             datas = json.load(file)
-        for data in datas['web-values']:
+        for data in datas['web-values'][:2]:
             if any(chinese_similarity(data["title"], publish["title"]) > 0.65 for publish in datas["web-published"]):
                 print("标题重复：", data["title"])
             else:
@@ -121,7 +126,9 @@ if __name__ == '__main__':
     chrome_options.add_argument("--disable-save-password-bubble")
     chrome_options.add_experimental_option("excludeSwitches", ["enable-automation"])
     chrome_options.add_argument('--disable-blink-features=AutomationControlled')
-
+    chrome_options.add_argument("--headless")  # 使用无头模式
+    # chrome_options.add_argument("--no-sandbox")  # 避免 Chrome 在 Linux 中启动失败
+    # chrome_options.add_argument("--disable-dev-shm-usage")  # 避免 Chrome 在 Linux 中启动失败
     # 创建一个Chrome浏览器实例
     driver = webdriver.Chrome(chrome_options)
 

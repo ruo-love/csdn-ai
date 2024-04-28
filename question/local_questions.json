@@ -1,18 +1,10 @@
 {
   "web-values": [
-    {
-      "title": "AI题库：CSS中的Flexbox和Grid布局有什么区别？分别适用于什么样的场景？",
-      "tags": [
-        "前端",
-        "CSS",
-        "Flexbox",
-        "Grid",
-        "区别",
-        "面试",
-        "Python AI自动化生成题库"
-      ]
-    },
-    {
+  ],
+  "server-values": [
+
+  ],
+  "web-published": [ {
       "title": "AI题库：什么是响应式设计？如何在项目中实现响应式布局？",
       "tags": [
         "前端",
@@ -33,12 +25,18 @@
         "面试",
         "Python AI自动化生成题库"
       ]
-    }
-  ],
-  "server-values": [
-
-  ],
-  "web-published": [ {
+    },  {
+      "title": "AI题库：CSS中的Flexbox和Grid布局有什么区别？分别适用于什么样的场景？",
+      "tags": [
+        "前端",
+        "CSS",
+        "Flexbox",
+        "Grid",
+        "区别",
+        "面试",
+        "Python AI自动化生成题库"
+      ]
+    }, {
       "title": "AI题库：解释一下React Hooks及其使用场景。",
       "tags": [
         "前端",
